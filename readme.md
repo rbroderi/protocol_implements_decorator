@@ -67,3 +67,6 @@ class Example2:
   def other(self) -> str:
     return str(self)
 ```
+```text
+NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
+```

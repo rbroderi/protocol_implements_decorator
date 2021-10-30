@@ -3,19 +3,6 @@ import inspect
 from typing import Any, Callable, Protocol, List, Tuple, Type, Set
 
 
-def protocol(cls: Type[Any]):
-    """A class decorator that signifies that this class is a protocol and adds
-    the __protocols_implemented__ attribute."""
-    try:
-        protocols_implemented: Set[str] = getattr(
-            cls, "__protocols_implemented__"
-        )
-        protocols_implemented.add(protocol.__qualname__)
-    except AttributeError:
-        setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
-    return cls
-
-
 def __implements(protocol: Type[Any]) -> Callable[..., Any]:
     """A class decorator that signifies that this class implements the
     specified protocol."""
@@ -84,14 +71,12 @@ def implements(*args: Type[Any]):
 def test():
     """Run some tests on the functionality of the decorators."""
 
-    @protocol
     class Printable(Protocol):
         """A test protocol that requires a to_string method."""
 
         def to_string(self) -> str:
             return ""
 
-    @protocol
     class Otherable(Protocol):
         """Another example."""
 
@@ -121,9 +106,8 @@ def test():
     fail = False
 
     @implements(Printable, Otherable)
-    class Example3:
-        """Test class that should implements printable but doesn't use
-        dectorator."""
+    class Example4:
+        """Test class that uses multiple protocols."""
 
         def to_string(self) -> str:
             return str(self)
@@ -131,16 +115,9 @@ def test():
         def other(self) -> str:
             return str(self)
 
-        assert not fail
-
-    def testUsage(o: Printable):
-        print(o.to_string())
-        pass
-
-    test = Example3()
+    test = Example4()
 
     print(test.get_protocols_implemented())
-    testUsage(test)
 
 
 if __name__ == "__main__":

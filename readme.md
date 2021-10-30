@@ -1,4 +1,5 @@
-The adds the @protocol and @implements decorators.
+The adds the @implements decorators.
+This will cause a runtime error if the class does not implement all parts of the protocol.
 
 Usage:
 ---

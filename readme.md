@@ -4,6 +4,7 @@ Usage:
 ---
 Two example protocols
 
+```python
 class Printable(Protocol):
   """A test protocol that requires a to_string method."""
   
@@ -15,6 +16,7 @@ class Otherable(Protocol):
 
   def other(self) -> str:
     return "
+```
 
 ---
 Example of one protocol

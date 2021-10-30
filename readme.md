@@ -21,6 +21,7 @@ class Otherable(Protocol):
 ---
 Example of one protocol
 
+```python
  @implements(Printable)
 class Example2:
 
@@ -38,5 +39,5 @@ class Example4:
 
   def other(self) -> str:
     return str(self)
-
+```
  

@@ -27,7 +27,9 @@ class Example2:
 
   def to_string(self) -> str:
     return str(self)
+```
 
+```python
 For multiple protocols you can chain dectorator or include in a list in one dectorator
 
 @implements(Printable, Otherable)

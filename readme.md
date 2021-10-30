@@ -1,5 +1,5 @@
 The adds the @implements decorators.
-This will cause a runtime error if the class does not implement all parts of the protocol.
+This will cause a runtime NotImplementedError if the class does not implement all parts of the protocol.
 
 Usage:
 ---

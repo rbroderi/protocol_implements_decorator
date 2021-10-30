@@ -29,9 +29,8 @@ class Example2:
     return str(self)
 ```
 
-```python
 For multiple protocols you can chain dectorator or include in a list in one dectorator
-
+```python
 @implements(Printable, Otherable)
 class Example4:
   """Test class that uses multiple protocols."""

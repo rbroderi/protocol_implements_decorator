@@ -22,7 +22,7 @@ class Otherable(Protocol):
 Example of one protocol
 
 ```python
- @implements(Printable)
+@implements(Printable)
 class Example2:
 
   def to_string(self) -> str:

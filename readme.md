@@ -59,6 +59,7 @@ Errors
 ---
 This will cause a runtime error as it doesn't implement the Printable protocol
 
+```python
 @implements(Printable, Otherable)
 class Example2:
   """Test class that uses multiple protocols."""

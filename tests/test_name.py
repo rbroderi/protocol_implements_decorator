@@ -4,6 +4,7 @@ import string
 
 from name import Name
 
+
 @pytest.fixture
 def name():
     return get_name()
@@ -11,10 +12,14 @@ def name():
 
 def get_name():
     length = random.randint(1, 12)
-    first = ''.join(random.choices(string.ascii_uppercase +
-                                   string.ascii_lowercase, k=length))
-    last = ''.join(random.choices(string.ascii_uppercase +
-                                  string.digits, k=length))
+    first = "".join(
+        random.choices(
+            string.ascii_uppercase + string.ascii_lowercase, k=length
+        )
+    )
+    last = "".join(
+        random.choices(string.ascii_uppercase + string.digits, k=length)
+    )
     return Name(parts=[first, last], sort_order=(0, 1))
 
 
@@ -24,6 +29,7 @@ def name_factory():
         def get(self):
             name_factory = get_name()
             return name_factory
+
     return NameFactory()
 
 
@@ -52,10 +58,3 @@ def test_name_repr() -> None:
     name = Name(["Niomi", "Turle"])
     name2 = eval(repr(name))
     print(name2)
-
-
-#Name.seperator = ","
-#name = Name(["first","last"])
-#name2 = Name(["Zfirst","Alast"],(1,0))
-# print(name)
-#print(name2 > name)

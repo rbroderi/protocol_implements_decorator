@@ -31,8 +31,20 @@ class Example2:
 
 For multiple protocols you can chain dectorator or include in a list in one dectorator
 ```python
+@implements(Printable)
+@implements(Otherable)
+class Example1:
+  """Test class that uses multiple protocols."""
+
+  def to_string(self) -> str:
+    return str(self)
+
+  def other(self) -> str:
+    return str(self)
+
+
 @implements(Printable, Otherable)
-class Example4:
+class Example2:
   """Test class that uses multiple protocols."""
 
   def to_string(self) -> str:

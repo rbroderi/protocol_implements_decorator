@@ -1,22 +1,32 @@
 import inspect
-from typing import Any, Callable, Protocol, Type, TypeVar
-
-_T = TypeVar("_T", bound="object")
-_Tp = TypeVar("_Tp", bound="Protocol")
+from typing import Any, Callable, Protocol
 
 
+def protocol(cls: type[Any]):
+    try:
+        protocols_implemented: set[str] = getattr(
+            cls, "__protocols_implemented__"
+        )
+        protocols_implemented.add(protocol.__qualname__)
+    except AttributeError:
+        setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
+    return cls
+
+
+@protocol
 class Printable(Protocol):
-    def to_string(self):
-        pass
-
-    def _private_method(self):
-        pass
+    def to_string(self) -> str:
+        return ""
 
 
-def implements(
-    protocol: Type[_Tp], require_private: bool = False
-) -> Callable[..., Any]:
-    def inner(cls: Type[_T]):
+@protocol
+class Otherable(Protocol):
+    def other(self) -> str:
+        return ""
+
+
+def implements(protocol: type[Any]) -> Callable[..., Any]:
+    def inner(cls: type[Any]):
         implements: set[str] = set()
         protocol_implements: set[str] = set()
         NO_NEED_TO_IMPLEMENT = (
@@ -26,33 +36,27 @@ def implements(
             "__init_subclass__",
         )
 
+        try:
+            protocols_implemented: set[str] = getattr(
+                cls, "__protocols_implemented__"
+            )
+            protocols_implemented.add(protocol.__qualname__)
+        except AttributeError:
+            setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
+
         for name, method in inspect.getmembers(cls):
-            if not require_private and name.startswith("_"):
+            if name.startswith("_") and name != "__protocols_implemented__":
                 continue
-            if (
-                (
-                    not inspect.ismethod(method)
-                    and not inspect.isfunction(method)
-                )
-                or inspect.isbuiltin(method)
-                or name in NO_NEED_TO_IMPLEMENT
-            ):
+            if inspect.isbuiltin(method) or name in NO_NEED_TO_IMPLEMENT:
                 continue
             implements.add(name)
         for name, method in inspect.getmembers(protocol):
-            if not require_private and name.startswith("_"):
+            if name.startswith("_") and name != "__protocols_implemented__":
                 continue
-            if (
-                (
-                    not inspect.ismethod(method)
-                    and not inspect.isfunction(method)
-                )
-                or inspect.isbuiltin(method)
-                or name in NO_NEED_TO_IMPLEMENT
-            ):
+            if inspect.isbuiltin(method) or name in NO_NEED_TO_IMPLEMENT:
                 continue
             protocol_implements.add(name)
-        if implements != protocol_implements:
+        if not protocol_implements.issubset(implements):
             raise NotImplementedError(
                 f"{protocol.__qualname__} requires implentation of"
                 f" {list(set(protocol_implements) - set(implements))!r}"
@@ -69,8 +73,6 @@ try:
     class Example:
         """Test class that should implement printable but doesn't."""
 
-        pass
-
 
 except NotImplementedError:
     fail = True
@@ -78,15 +80,15 @@ except NotImplementedError:
 
 assert fail
 
-fail: bool = False
+fail = False
 try:
 
     @implements(Printable)
     class Example2:
         """Test class that does implement Printable."""
 
-        def to_string(self):
-            return "str(self)"
+        def to_string(self) -> str:
+            return str(self)
 
 
 except NotImplementedError:
@@ -96,19 +98,25 @@ except NotImplementedError:
 assert not fail
 
 
-fail: bool = False
-try:
+@implements(Otherable)
+@implements(Printable)
+class Example3:
+    """Test class that should implements printable but doesn't use
+    dectorator."""
 
-    @implements(Printable, require_private=True)
-    class Example3:
-        """Test class that does implement Printable but not private methods."""
+    def to_string(self) -> str:
+        return str(self)
 
-        def to_string(self):
-            return "str(self)"
+    def other(self) -> str:
+        return str(self)
 
 
-except NotImplementedError:
-    fail = True
+def testUsage(o: Printable):
+    print(o.to_string())
     pass
 
-assert fail
+
+test = Example3()
+# TODO any way to fix has no attribute "__protocols_implemented__ mypy error?
+print(test.__protocols_implemented__)
+testUsage(test)

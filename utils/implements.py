@@ -40,6 +40,11 @@ def implements(protocol: type[Any]) -> Callable[..., Any]:
         except AttributeError:
             setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
 
+        def get_protocols_implemented(cls: type[Any]) -> set[str]:
+            return cls.__protocols_implemented__
+
+        setattr(cls, "get_protocols_implemented", get_protocols_implemented)
+
         # get set of methods and attributes implemented by class
         for name, method in inspect.getmembers(cls):
             if inspect.isbuiltin(method) or name in NO_NEED_TO_IMPLEMENT:
@@ -88,7 +93,7 @@ def main():
     try:
 
         @implements(Printable)
-        class Example:
+        class Example:  # type: ignore
             """Test class that should implement printable but doesn't."""
 
     except NotImplementedError:
@@ -98,7 +103,7 @@ def main():
     assert fail
 
     @implements(Printable)
-    class Example2:
+    class Example2:  # type: ignore
         """Test class that does implement Printable."""
 
         def to_string(self) -> str:
@@ -121,8 +126,8 @@ def main():
         pass
 
     test = Example3()
-    # TODO any way to fix has no attribute "__protocols_implemented__ mypy error?
-    print(test.__protocols_implemented__)
+
+    print(test.get_protocols_implemented())
     testUsage(test)
 
 

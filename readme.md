@@ -3,6 +3,7 @@ The adds the @protocol and @implements decorators.
 Usage:
 ---
 Two example protocols
+
 class Printable(Protocol):
   """A test protocol that requires a to_string method."""
   

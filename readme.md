@@ -54,4 +54,15 @@ class Example2:
   def other(self) -> str:
     return str(self)
 ```
- 
+
+Errors
+---
+This will cause a runtime error as it doesn't implement the Printable protocol
+
+@implements(Printable, Otherable)
+class Example2:
+  """Test class that uses multiple protocols."""
+
+  def other(self) -> str:
+    return str(self)
+```

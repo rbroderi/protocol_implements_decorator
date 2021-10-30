@@ -1,14 +1,13 @@
 """Adds the implements and protocol decorators."""
 import inspect
-from typing import Any, Callable, Protocol, List, Tuple
-import functools
+from typing import Any, Callable, Protocol, List, Tuple, Type, Set
 
 
-def protocol(cls: type[Any]):
+def protocol(cls: Type[Any]):
     """A class decorator that signifies that this class is a protocol and adds
     the __protocols_implemented__ attribute."""
     try:
-        protocols_implemented: set[str] = getattr(
+        protocols_implemented: Set[str] = getattr(
             cls, "__protocols_implemented__"
         )
         protocols_implemented.add(protocol.__qualname__)
@@ -17,14 +16,14 @@ def protocol(cls: type[Any]):
     return cls
 
 
-def _implements(protocol: type[Any]) -> Callable[..., Any]:
+def __implements(protocol: Type[Any]) -> Callable[..., Any]:
     """A class decorator that signifies that this class implements the
     specified protocol."""
 
-    def inner(cls: type[Any]):
+    def inner(cls: Type[Any]):
         """Inner wrapper."""
-        implements: set[str] = set()
-        protocol_implements: set[str] = set()
+        implements: Set[str] = set()
+        protocol_implements: Set[str] = set()
         NO_NEED_TO_IMPLEMENT: List[str] = []
         for name, method in inspect.getmembers(Protocol):
             if inspect.isbuiltin(method):
@@ -34,14 +33,14 @@ def _implements(protocol: type[Any]) -> Callable[..., Any]:
 
         # set implented protocols appending if needed.
         try:
-            protocols_implemented: set[str] = getattr(
+            protocols_implemented: Set[str] = getattr(
                 cls, "__protocols_implemented__"
             )
             protocols_implemented.add(protocol.__qualname__)
         except AttributeError:
             setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
 
-        def get_protocols_implemented(cls: type[Any]) -> Tuple[str, ...]:
+        def get_protocols_implemented(cls: Type[Any]) -> Tuple[str, ...]:
             return tuple(sorted(cls.__protocols_implemented__))
 
         setattr(cls, "get_protocols_implemented", get_protocols_implemented)
@@ -70,10 +69,10 @@ def _implements(protocol: type[Any]) -> Callable[..., Any]:
     return inner
 
 
-def implements(*args: type[Any]):
+def implements(*args: Type[Any]):
     def wrapped(func: Callable[..., Any]):
         for arg in reversed(args):
-            func = _implements(arg)(func)
+            func = __implements(arg)(func)
         return func
 
     return wrapped

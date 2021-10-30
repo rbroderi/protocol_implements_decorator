@@ -1,6 +1,7 @@
 """Adds the implements and protocol decorators."""
 import inspect
-from typing import Any, Callable, Protocol, List
+from typing import Any, Callable, Protocol, List, Tuple
+import functools
 
 
 def protocol(cls: type[Any]):
@@ -16,7 +17,7 @@ def protocol(cls: type[Any]):
     return cls
 
 
-def implements(protocol: type[Any]) -> Callable[..., Any]:
+def _implements(protocol: type[Any]) -> Callable[..., Any]:
     """A class decorator that signifies that this class implements the
     specified protocol."""
 
@@ -40,8 +41,8 @@ def implements(protocol: type[Any]) -> Callable[..., Any]:
         except AttributeError:
             setattr(cls, "__protocols_implemented__", {protocol.__qualname__})
 
-        def get_protocols_implemented(cls: type[Any]) -> set[str]:
-            return cls.__protocols_implemented__
+        def get_protocols_implemented(cls: type[Any]) -> Tuple[str, ...]:
+            return tuple(sorted(cls.__protocols_implemented__))
 
         setattr(cls, "get_protocols_implemented", get_protocols_implemented)
 
@@ -69,10 +70,19 @@ def implements(protocol: type[Any]) -> Callable[..., Any]:
     return inner
 
 
+def implements(*args: type[Any]):
+    def wrapped(func: Callable[..., Any]):
+        for arg in reversed(args):
+            func = _implements(arg)(func)
+        return func
+
+    return wrapped
+
+
 # ***********************************
 
 
-def main():
+def test():
     """Run some tests on the functionality of the decorators."""
 
     @protocol
@@ -109,8 +119,9 @@ def main():
         def to_string(self) -> str:
             return str(self)
 
-    @implements(Otherable)
-    @implements(Printable)
+    fail = False
+
+    @implements(Printable, Otherable)
     class Example3:
         """Test class that should implements printable but doesn't use
         dectorator."""
@@ -120,6 +131,8 @@ def main():
 
         def other(self) -> str:
             return str(self)
+
+        assert not fail
 
     def testUsage(o: Printable):
         print(o.to_string())
@@ -132,4 +145,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test()

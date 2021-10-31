@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "protocol_implements_decorator"
+version = "0.3.0"
+description = "Adds '@implements' decorator to aid in explicit use of protocols."
+authors = ["rbroderi <richard@sanguinesoftware.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

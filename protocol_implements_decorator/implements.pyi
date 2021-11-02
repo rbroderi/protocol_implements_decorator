@@ -1,0 +1,3 @@
+from typing import Any, Type
+
+def implements(*args: Type[Any]) -> Any: ...

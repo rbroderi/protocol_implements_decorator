@@ -57,7 +57,7 @@ def __implements(protocol: Type[Any]) -> Callable[..., Any]:
         # implemented methods and attributes raise error
         if not protocol_implements.issubset(implements):
             raise NotImplementedError(
-                f"{protocol.__qualname__} requires implentation of"
+                f"{protocol.__qualname__} requires implementation of"
                 f" {list(set(protocol_implements) - set(implements))!r}"
             )
         return cls

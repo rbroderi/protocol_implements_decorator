@@ -70,5 +70,5 @@ class Example2:
     return str(self)
 ```
 ```text
-NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
+NotImplementedError: test.<locals>.Printable requires implementation of ['to_string']
 ```

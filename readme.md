@@ -1,6 +1,8 @@
 The adds the @implements decorators.
 This will cause a runtime NotImplementedError if the class does not implement all parts of the protocol.
 
+See: https://pypi.org/project/protocol-implements-decorator/
+
 Usage:
 ---
 Two example protocols

@@ -1,7 +1,13 @@
-The adds the @implements decorators.
-This will cause a runtime NotImplementedError if the class does not implement all parts of the protocol.
+# protocol_implements_decorator
 
-See: https://pypi.org/project/protocol-implements-decorator/
+Adds the "implements" decorator to make using protocols easier and more explicit
+
+
+## Description
+
+Adds the @implements decorator.
+This will cause a runtime NotImplementedError if the class does not implement all parts of the protocol.
+Also adds the get_protocols_implemented method to the class providing a list of all protocols the decorated class adhears to.
 
 Usage:
 ---
@@ -70,5 +76,14 @@ class Example2:
     return str(self)
 ```
 ```text
-NotImplementedError: test.<locals>.Printable requires implementation of ['to_string']
+NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
 ```
+
+
+
+<!-- pyscaffold-notes -->
+
+## Note
+
+This project has been set up using PyScaffold 4.1.1. For details and usage
+information on PyScaffold see https://pyscaffold.org/.

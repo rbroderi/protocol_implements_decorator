@@ -10,7 +10,7 @@ with open("README.md") as f:
 
 setup_kwargs = {
     "name": "protocol-implements-decorator",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": (
         "Adds '@implements' decorator to aid in explicit use of protocols."
     ),

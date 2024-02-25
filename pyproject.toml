@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "protocol_implements_decorator"
-version = "0.3.0"
+version = "1.0.0"
 description = "Adds '@implements' decorator to aid in explicit use of protocols."
 authors = ["rbroderi <richard@sanguinesoftware.com>"]
 readme = "README.md"

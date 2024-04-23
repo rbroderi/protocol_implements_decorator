@@ -5,7 +5,7 @@ requires = ["setuptools>=67.0", "setuptools_scm[toml]>=7.1"]
 [project]
 authors = [{"name" = "R.Broderick"}]
 description = "Adds the 'implements' decorator to make using protocols easier and more explicit"
-version = "1.1.0"
+version = "1.1.2"
 license = {"file" = "LICENSE"}
 name = "Protocol-Implements-Decorator"
 readme = {file = "README.md", content-type = "text/markdown"}

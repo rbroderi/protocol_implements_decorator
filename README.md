@@ -1,57 +1,89 @@
-# StringDataDeque
+# protocol_implements_decorator
 
-Useful when building a string from data that can be converted into a string, in parts.
+Adds the "implements" decorator to make using protocols easier and more explicit
 
-## Installation
 
-```bash
-pip install StringDataDeque
-```
+## Description
 
-## Uses
+Adds the @implements decorator.
+This will cause a runtime NotImplementedError if the class does not implement all parts of the protocol.
+Also adds the get_protocols_implemented method to the class providing a list of all protocols the decorated class adhears to.
 
-This is designed to be a drop-in replacement for when you might want to append to a string in a loop.
+Usage:
+---
+Two example protocols
 
-### Benefits
-* Around 5 times faster than the naive implementation of appending to a string, such as
-    ```python
-    x = ""
-    for x in collection:
-        x+="new string"
-    ```
-* Provides many extra features that help simply code.
-
-## Examples
 ```python
-sd = StringDeque(sep="\n")
-for x in collection:
-    sd += x
-# StringDeque is a specialization of StringDataDeque where conversion func is "str"
-# this allows any datatype to be used which can convert to str
-sd += 1
-print(sd)
+class Printable(Protocol):
+  """A test protocol that requires a to_string method."""
+
+  def to_string(self) -> str:
+    return ""
+
+class Otherable(Protocol):
+  """Another example."""
+
+  def other(self) -> str:
+    return "
 ```
 
-You can also pipe data into the StringDeque
+---
+Example of one protocol
+
 ```python
-sd = StringDeque()
-sd = [1,2,3,4,5] | sd
-# or
-sd |= [1,2,3,4,5]
+@implements(Printable)
+class Example2:
+
+  def to_string(self) -> str:
+    return str(self)
 ```
 
-StringDataDeque implements the "contains" method so you can search within it
+For multiple protocols you can chain dectorator or include in a list in one dectorator
 ```python
-sd = StringDeque(["line_one","line_two"],sep="\n")
-if "line_one" in sd:
-    print("yes")
+@implements(Printable)
+@implements(Otherable)
+class Example1:
+  """Test class that uses multiple protocols."""
+
+  def to_string(self) -> str:
+    return str(self)
+
+  def other(self) -> str:
+    return str(self)
+
+
+@implements(Printable, Otherable)
+class Example2:
+  """Test class that uses multiple protocols."""
+
+  def to_string(self) -> str:
+    return str(self)
+
+  def other(self) -> str:
+    return str(self)
 ```
 
-If you need more control over how data is added to the deque either use StringDataDeque or one of its subclasses.
+Errors
+---
+This will cause a runtime error as it doesn't implement the Printable protocol
+
 ```python
-# convert_func is called when data is added, and format_func is called when data is printed.
-int_sdd =StringDataDeque(data="test", convert_func=int, format_func=str,sep=" ")
-int_sdd |= ["1","2","3","4","5"]
-assert int_sdd[0] == 1
-assert str(int_sdd) == "1 2 3 4 5"
+@implements(Printable, Otherable)
+class Example2:
+  """Test class that uses multiple protocols."""
+
+  def other(self) -> str:
+    return str(self)
 ```
+```text
+NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
+```
+
+
+
+<!-- pyscaffold-notes -->
+
+## Note
+
+This project has been set up using PyScaffold 4.1.1. For details and usage
+information on PyScaffold see https://pyscaffold.org/.

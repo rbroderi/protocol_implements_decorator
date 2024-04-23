@@ -79,11 +79,3 @@ class Example2:
 NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
 ```
 
-
-
-<!-- pyscaffold-notes -->
-
-## Note
-
-This project has been set up using PyScaffold 4.1.1. For details and usage
-information on PyScaffold see https://pyscaffold.org/.

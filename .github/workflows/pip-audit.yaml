@@ -15,9 +15,9 @@ jobs:
           python-version-file: .python-version
           cache: 'pip'
 
-      - uses: pypa/gh-action-pip-audit@v1.0.8
-
       - uses: taiki-e/install-action@just
 
       - name: Install Dependencies
         run: just install
+
+      - uses: pypa/gh-action-pip-audit@v1.0.8

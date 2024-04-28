@@ -1,16 +1,23 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools>=67.0"]
+requires = ["setuptools>=67.0", "wheel"]
 
 [project]
 authors = [{"name" = "R.Broderick"}]
 description = "Adds the 'implements' decorator to make using protocols easier and more explicit"
-version = "1.1.3"
+version = "1.1.4"
 license = {"file" = "LICENSE"}
 name = "Protocol-Implements-Decorator"
 readme = {file = "README.md", content-type = "text/markdown"}
 dependencies = ["typing-extensions; python_version < '3.12'"]
 requires-python = ">=3.10.0"
+classifiers = [
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
 
 [project.optional-dependencies]
 dev = [
@@ -51,6 +58,10 @@ docs = [
   "autodocsumm",
   "sphinx-pyproject"
 ]
+
+[project.urls]
+homepage = "https://github.com/rbroderi/protocol_implements_decorator"
+documentation = "https://rbroderi.github.io/protocol_implements_decorator/"
 
 [tool.dapperdata]
 exclude_paths = [".venv", ".mypy_cache", ".git", ".vscode"]
@@ -238,8 +249,9 @@ readme = {file = ["README.md"]}
 [tool.setuptools.package-data]
 library = ["py.typed"]
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+exclude = ["docs*", "tests*"]
+where = ["src"]
 
 [tool.sphinx-pyproject]
 # -- General configuration ---------------------------------------------------

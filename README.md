@@ -78,4 +78,3 @@ class Example2:
 ```text
 NotImplementedError: test.<locals>.Printable requires implentation of ['to_string']
 ```
-
